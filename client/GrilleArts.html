@@ -1,0 +1,125 @@
+<template name="GrilleArts">
+	<div class="commerce" id="GrilleArts">
+    <h2 class = "titre">Gril 2 l'Art</h2><br>
+    <h3>Contact : +33 4 76 04 90 40</h3>
+    <h3>Lieu : 9 Rue des Tanneurs, 38760 Varces-Allières-et-Risset, France</h3>
+    <div class="map-container">
+        {{> googleMap name="map" options=mapOptions}}
+    </div>
+    <h4 class = "titre">Menus :</h4> 
+    <ul>
+        <li onclick="javascript:montre('information1');">Petit Boucher</li>
+            <dd id="information1">
+                <ul>
+                    <img class="image" style="display: block;margin-left: auto;margin-right: auto;" src="/images/petitboucher-GrilleArts.jpg">
+                    <li>Description : Délicats morceaux de poulets accompagnés de frites e crudités</li>
+                    <li>Prix : <p id="GrilleArts-petitboucher"></p><input type="hidden" id="PetitBoucher" value="8"><input type="submit" onclick="commander('PetitBoucher')" name="commander" value="Commander"></li>                   
+                </ul>
+            </dd>
+            <div onload="initialiser()" id="carte" style="width:50%; height:63%; margin-left: auto; margin-right: auto;"></div> 
+
+        <li onclick="javascript:montre('information2');">Produits de la mer</li>
+            <dd id="information2">
+                <ul>
+                    <img class="image" style="display: block;margin-left: auto;margin-right: auto;" src="/images/produitsdelamer-GrilleArts.jpg">
+                    <li>Description : Assiete de plusieurs brochettes de produits de la mer accompagnés de crudités</li>
+                    <li>Prix : <p id="GrilleArts-produitsdelamer"></p><input type="hidden" id="ProduitsDeLaMer" value="10"><input type="submit" onclick="commander('ProduitsDeLaMer')" name="commander" value="Commander"></li>
+                </ul>
+            </dd>   
+
+        <li onclick="javascript:montre('information3');">Gourmand</li>
+            <dd id="information3">
+                <ul>
+                    <img class="image" style="display: block;margin-left: auto;margin-right: auto;" src="/images/gourmand-GrilleArts.jpg">
+                    <li>Description : Véritable festin pour tout amateur de grillades</li>
+                    <li>Prix : <p id="GrilleArts-gourmand"></p><input type="hidden" id="Gourmand" value="15"><input type="submit" onclick="commander('Gourmand')" name="commander" value="Commander"></li>      
+                </ul>
+            </dd>   
+
+        <li onclick="javascript:montre('information4');">Végétarien</li>
+            <dd id="information4">
+                <ul>
+                    <img class="image" style="display: block;margin-left: auto;margin-right: auto;" src="/images/vegetarien-GrilleArts.jpg">
+                    <li>Description : Assortiments de nombreux légumes et crudités ainsi que leurs sauces et accompagnements</li>
+                    <li>Prix : <p id="GrilleArts-vegetarien"></p><input type="hidden" id="Vegetarien" value="10"><input type="submit" onclick="commander('Vegetarien')" name="commander" value="Commander"></li>
+                </ul>
+            </dd>   
+    </ul>
+    </div>
+
+    <script type="text/javascript">
+    var nom = "Gril 2 l'Art";
+    var prixpetitboucher = 8;
+    var prixproduitdelamer = 10;
+    var prixgourmand = 15;
+    var prixvegetarien = 10;
+    var maintenant=new Date();
+    var jour=maintenant.getDate();
+    var mois=maintenant.getMonth()+1;
+    var an=maintenant.getFullYear();
+    window.onload=montre();
+    function montre(id) 
+    {
+        var d = document.getElementById(id);
+        for (var i = 1; i<=10; i++) 
+    {
+        if (document.getElementById('information'+i)) {document.getElementById('information'+i).style.display='none';}
+    }
+        if (d) {d.style.display='block';}
+    }
+    document.getElementById("GrilleArts-petitboucher").innerHTML=prixpetitboucher + "€ ";
+    document.getElementById("GrilleArts-produitsdelamer").innerHTML=prixproduitdelamer + "€ ";
+    document.getElementById("GrilleArts-gourmand").innerHTML=prixgourmand + "€ ";
+    document.getElementById("GrilleArts-vegetarien").innerHTML=prixvegetarien + "€ ";
+
+    function commander(id)
+    {
+        if (!document.getElementById('panier')) 
+        {
+            alert("Veuillez vous inscrire pour passer des commandes");
+            window.scrollTo(500,0);
+        }
+        var prix = document.getElementById(id).value;
+        document.getElementById('panier').insertRow().insertCell().innerHTML= nom + " : " + id + " " + prix + "€ <br>";
+        document.getElementById('total').innerHTML=parseInt(document.getElementById('total').innerHTML) + parseInt(prix) + "€ ";
+        document.getElementById('totale').style.display='block';
+        document.getElementById('total').style.display='block';
+        window.scrollTo(500,0);
+    }
+
+delay = 200;
+setTimeout(function() 
+{
+
+    window.onload = function()
+    {
+        if (document.getElementById('valid'))
+        {
+            document.getElementById('valid').onclick = function()
+            {
+
+                if (document.getElementById('panier').rows.length === 0) 
+                    {alert("Pas d'article...");}
+                else
+                {
+                     Validation = window.prompt("Valider la commande? (oui ou non)", "oui");
+                    if (Validation === "oui")
+                    {
+                        document.getElementById('historique').insertRow().insertCell().innerHTML= document.getElementById('panier').innerHTML + " le " + jour + "/" + mois + "/" + an + "<br><br>";
+                        document.getElementById('panier').innerHTML="";
+                        document.getElementById('total').innerHTML="0";
+                        alert("Votre commande a été prise en compte");
+                    }
+                    if (Validation !== "oui")
+                    {
+                        alert("Commande non validée (répondre par oui si vous voulez valider)");
+                    }
+                }
+            }
+        }
+    }
+}, delay);
+    
+    </script>
+
+</template>
